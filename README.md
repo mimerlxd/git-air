@@ -98,15 +98,36 @@ journalctl -u git-air -f
 
 ## Installation
 
-### Prerequisites
+### 🚀 One-Line Install (Recommended)
+
+**For MacOS and Linux Ubuntu:**
+```bash
+curl -sSL https://raw.githubusercontent.com/your-repo/git-air/main/install.sh | bash
+```
+
+**This will automatically:**
+- ✅ Detect your operating system (MacOS/Linux Ubuntu)
+- ✅ Install Go compiler if not present
+- ✅ Download and compile git-air from source
+- ✅ Install to `/usr/local/bin/git-air`
+- ✅ Clean up temporary files
+- ✅ Show usage guide
+
+### 📦 Manual Installation
+
+#### Prerequisites
 - Go 1.21 or higher
 - Git installed and configured
 
-### Build from Source
+#### Build from Source
 ```bash
 git clone <repository-url>
 cd git-air
 go build -o git-air
+
+# Install globally (optional)
+sudo cp git-air /usr/local/bin/
+sudo chmod +x /usr/local/bin/git-air
 ```
 
 ## How It Works
