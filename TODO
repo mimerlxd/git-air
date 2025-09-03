@@ -1,0 +1,7 @@
+Lav en Git Air service - dæmon der kan startes i et projekt på Linux og MacOS - den skal kunne:
+1: auto committe alle git's på det område den startes. 
+2: auto push alle git's på det område den startes.
+3: Se efter ændringer på Githiub repo hver minut og pull denne med det lokale git.(beregnet til inter project kummunikation)
+
+Skal klare alle typer git fra alm til monorepo
+Kodet i Go
