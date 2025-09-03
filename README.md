@@ -1,38 +1,102 @@
 # Git Air 🚀
 
-A fully automatic Git daemon service for Linux and macOS that handles auto-commits, auto-pushes, and auto-pulls.
+A simple, fully automatic Git daemon service for Linux and macOS that handles auto-commits, auto-pushes, and auto-pulls.
 
 ## Features
 
-- **Auto Commit**: Automatically commits all changes with "auto commit" message
-- **Auto Push**: Automatically pushes commits to remote repository  
-- **Auto Pull**: Checks for remote changes every minute and pulls them
-- **Multi-repo Support**: Works with regular repositories and monorepos
-- **Cross Platform**: Supports Linux and macOS
-- **Configurable**: YAML configuration file support
-- **Daemon Mode**: Runs as background service
-- **File System Monitoring**: Real-time file change detection
+- **🔍 Auto Discovery**: Automatically finds all Git repositories in current directory and subdirectories
+- **📝 Auto Commit**: Automatically commits all changes with timestamp
+- **🚀 Multi-Remote Push**: Pushes to ALL configured remotes for each repository  
+- **📡 Inter-Project Communication**: Pulls updates from remotes every minute
+- **📚 Monorepo Support**: Syncs submodules before committing main repository
+- **🏠 Dev Server Ready**: Perfect for development servers with multiple projects
 
-## Quick Start - Dev Server Setup
+## Quick Start
 
-### Normal Case: Dev Server in HOME Directory
+### 1. Running Git Air in a Project Terminal
+
+**For single project monitoring:**
 ```bash
-# 1. Place git-air in your HOME directory on dev server
-cp git-air ~/
-cd ~
+# Navigate to your project directory
+cd /path/to/your/project
 
-# 2. Start Git Air - it will automatically discover and manage ALL projects
+# Download or copy git-air binary to project
+cp /path/to/git-air ./
+
+# Start git-air (will monitor current directory and subdirectories)
 ./git-air
 ```
 
 **This will:**
-- 🔍 **Scan your entire HOME directory** and all subdirectories
-- 📁 **Discover ALL Git repositories** in your projects
-- 🤖 **Auto-commit changes** in every repository  
-- 🚀 **Push to ALL remotes** for each repository
-- 🔄 **Keep everything synchronized** automatically
+- 🔍 Monitor the current project and any Git repositories in subdirectories
+- 📝 Auto-commit changes every 30 seconds if detected
+- 🚀 Push to all configured remotes immediately
+- 📡 Pull updates from remotes every minute
 
-### Installation
+### 2. Running Git Air as Ubuntu Service (Dev Server)
+
+**For development server with multiple projects:**
+
+#### Step 1: Install Git Air
+```bash
+# Copy git-air to system location
+sudo cp git-air /usr/local/bin/
+sudo chmod +x /usr/local/bin/git-air
+```
+
+#### Step 2: Create systemd service
+```bash
+# Create service file
+sudo nano /etc/systemd/system/git-air.service
+```
+
+**Add this content:**
+```ini
+[Unit]
+Description=Git Air - Automatic Git synchronization service
+After=network.target
+Wants=network.target
+
+[Service]
+Type=simple
+User=your-username
+Group=your-username
+WorkingDirectory=/home/your-username
+ExecStart=/usr/local/bin/git-air
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
+```
+
+#### Step 3: Enable and start service
+```bash
+# Reload systemd
+sudo systemctl daemon-reload
+
+# Enable service to start at boot
+sudo systemctl enable git-air
+
+# Start service now
+sudo systemctl start git-air
+
+# Check service status
+sudo systemctl status git-air
+
+# View logs
+journalctl -u git-air -f
+```
+
+**This will:**
+- 🏠 **Scan entire HOME directory** for all Git repositories
+- 🚀 **Auto-sync ALL projects** continuously
+- 🔄 **Start automatically** on server boot
+- 📊 **Log all operations** to system journal
+
+## Installation
 
 ### Prerequisites
 - Go 1.21 or higher
@@ -42,77 +106,20 @@ cd ~
 ```bash
 git clone <repository-url>
 cd git-air
-go mod tidy
 go build -o git-air
 ```
 
-## Usage
-
-### Basic Usage
-```bash
-# Run in current directory (scans current dir + all subdirectories for Git repos)
-./git-air
-
-# Run in specific directory and scan all subdirectories
-./git-air -dir /path/to/your/projects
-
-# Single repository mode (only monitor one specific Git repo)
-./git-air -dir /path/to/single/repo -multi=false
-
-# Custom scan paths (multiple directories)
-./git-air -scan "/path/to/projects1,/path/to/projects2"
-
-# Run with custom intervals
-./git-air -watch 10s -pull 2m
-
-# Run with custom log level
-./git-air -log debug
-```
-
-### Default Behavior
-**By default, `./git-air` will:**
-- 🔍 **Scan current directory and ALL subdirectories** for Git repositories
-- 📝 **Auto-commit** changes in ALL discovered repositories
-- 🚀 **Push to ALL remotes** configured for each repository
-- 📥 **Pull from remotes** to keep repositories synchronized
-- 🔄 **Continuously monitor** for new repositories and changes
-
-### Configuration File
-Create a `git-air.yaml` file in your project directory:
-
-```yaml
-watch_interval: 30s
-pull_interval: 1m
-auto_commit: true
-auto_push: true
-auto_pull: true
-commit_message: "auto commit"
-exclude_paths:
-  - ".git"
-  - "node_modules"
-  - "*.log"
-log_level: "info"
-```
-
-### Command Line Options
-- `-config`: Path to configuration file (default: "git-air.yaml")
-- `-dir`: Directory to monitor (default: current directory)
-- `-watch`: Interval between file system checks (default: 30s)
-- `-pull`: Interval between remote checks (default: 1m)
-- `-log`: Log level - debug, info, warn, error (default: "info")
-- `-daemon`: Run as daemon process
-
 ## How It Works
 
-1. **File Monitoring**: Uses filesystem watchers to detect changes in real-time
+1. **Repository Discovery**: Scans for all `.git` directories recursively
 2. **Auto Commit**: When changes are detected, automatically stages and commits them
-3. **Auto Push**: After successful commits, pushes to the configured remote
-4. **Auto Pull**: Periodically checks remote repository for changes and pulls them
-5. **Conflict Handling**: Handles merge conflicts gracefully with logging
+3. **Multi-Remote Push**: After successful commits, pushes to ALL configured remotes
+4. **Inter-Project Communication**: Every minute, checks all remotes for updates and pulls them
+5. **Monorepo Handling**: For repositories with submodules, syncs all submodules before committing main repo
 
 ## Use Cases
 
-### 💻 **Primary Use Case: Development Server**
+### 🖥️ **Primary Use Case: Development Server**
 - **Place git-air in ~/home** on your development server
 - **Manages all your projects automatically** - no manual setup per project
 - **Multi-remote support** - pushes to origin, backup, mirror, etc.
@@ -120,7 +127,6 @@ log_level: "info"
 - **Never lose work** - continuous auto-commits serve as safety net
 
 ### 🔄 **Other Use Cases**
-
 - **Development Workflow**: Never lose work with automatic commits
 - **Team Collaboration**: Keep repositories synchronized automatically  
 - **CI/CD Integration**: Ensure changes are always pushed to trigger builds
@@ -129,33 +135,21 @@ log_level: "info"
 
 ## Architecture
 
-The service consists of several key components:
+The service consists of a simple, single-file Go application that:
 
-- **Main Service**: Orchestrates all operations and handles signals
-- **Git Repository**: Wraps Git operations with error handling
-- **File Watcher**: Monitors filesystem changes using fsnotify
-- **Configuration**: YAML-based configuration management
-- **Logging**: Structured logging with configurable levels
+- **Repository Scanner**: Discovers Git repositories recursively
+- **Change Monitor**: Checks for uncommitted changes every 30 seconds
+- **Git Operations**: Handles commits, pushes to all remotes, and pulls
+- **Monorepo Support**: Syncs submodules before main repository commits
+- **Inter-Project Sync**: Pulls from all remotes every minute
 
 ## Security Considerations
 
-- Git Air only operates on the local repository
-- Uses standard Git commands - no direct repository manipulation
-- Respects Git configuration (credentials, remotes, etc.)
-- Excludes sensitive files through configuration
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests if applicable
-5. Submit a pull request
+- Git Air only operates on local repositories using standard Git commands
+- Uses existing Git configuration (credentials, remotes, etc.)
+- Excludes common non-source directories (node_modules, vendor)
+- No direct repository manipulation - relies on Git CLI
 
 ## License
 
 MIT License - see LICENSE file for details
-
-## Support
-
-For issues and feature requests, please use the GitHub issue tracker.
