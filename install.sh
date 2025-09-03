@@ -6,7 +6,7 @@
 set -e
 
 GIT_AIR_VERSION="latest"
-GIT_AIR_REPO="https://github.com/your-repo/git-air"
+GIT_AIR_REPO="https://github.com/mimerlxd/git-air"
 INSTALL_DIR="/usr/local/bin"
 TEMP_DIR="/tmp/git-air-install-$$"
 GO_VERSION="1.21.0"
@@ -185,7 +185,7 @@ show_help() {
     echo "• Run git-air in your home directory to monitor all projects"
     echo "• Perfect for auto-syncing multiple repositories"
     echo ""
-    echo "📖 Documentation: https://github.com/your-repo/git-air"
+    echo "📖 Documentation: https://github.com/mimerlxd/git-air"
     echo -e "${NC}"
 }
 

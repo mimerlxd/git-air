@@ -102,7 +102,7 @@ journalctl -u git-air -f
 
 **For MacOS and Linux Ubuntu:**
 ```bash
-curl -sSL https://raw.githubusercontent.com/your-repo/git-air/main/install.sh | bash
+curl -sSL https://raw.githubusercontent.com/mimerlxd/git-air/main/install.sh | bash
 ```
 
 **This will automatically:**
