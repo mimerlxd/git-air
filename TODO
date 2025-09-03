@@ -1,7 +1,66 @@
-Lav en Git Air service - dæmon der kan startes i et projekt på Linux og MacOS - den skal kunne:
-1: auto committe alle git's på det område den startes. 
-2: auto push alle git's på det område den startes.
-3: Se efter ændringer på Githiub repo hver minut og pull denne med det lokale git.(beregnet til inter project kummunikation)
+# @TODO - Git Air Service 🚀
 
-Skal klare alle typer git fra alm til monorepo
-Kodet i Go
+## Overview
+Lav en Git Air service - dæmon der kan startes i et projekt på Linux og MacOS
+
+## Core Features
+- [x] **Auto Commit**: Automatisk commit alle git changes i det område den startes
+- [x] **Auto Push**: Automatisk push alle commits til remote repository
+- [x] **Auto Pull**: Se efter ændringer på GitHub repo hver minut og pull til lokalt git
+  - Bruges til inter-project kommunikation
+- [x] **Multi-repo Support**: Skal klare alle typer git fra almindelige til monorepo
+
+## Technical Requirements
+- [x] **Platform Support**: Linux og MacOS
+- [x] **Language**: Kodet i Go
+- [x] **Daemon Mode**: Kører som background service
+- [x] **Configuration**: Konfigurerbar scanning interval
+- [x] **Logging**: Detaljeret logging af alle operationer
+
+## Implementation Plan
+
+### Phase 1: Core Git Operations
+- [x] Implementer git status detection
+- [x] Auto commit med "auto commit" som standard message
+- [x] Auto push til configured remote
+- [x] Basic error handling
+
+### Phase 2: Monitoring & Sync
+- [x] File system watcher for changes
+- [x] Periodic GitHub polling (configurable interval)
+- [x] Auto pull med conflict resolution
+- [ ] Smart merge strategies
+
+### Phase 3: Advanced Features
+- [x] Multi-repository scanning
+- [x] Monorepo support
+- [x] Configuration file support
+- [x] CLI interface for control
+- [x] Status reporting
+
+### Phase 4: Production Ready
+- [x] Comprehensive error handling
+- [x] Recovery mechanisms
+- [ ] Performance optimization
+- [x] Documentation
+- [ ] Testing suite
+
+## Architecture Notes
+- Daemon process med graceful shutdown
+- Configurable via YAML/JSON config file
+- Structured logging med levels
+- Signal handling for clean restarts
+
+## Auto Commit Strategy
+- Default commit message: "auto commit"
+- Timestamp i commit beskrivelse
+- Skip commits hvis ingen ændringer
+- Intelligent staging (exclude temp files, etc.)
+- **NEW**: Multi-remote push support - pushes to ALL configured remotes
+- **NEW**: Dev server mode - scans HOME directory and all subdirectories
+- **NEW**: Automatic repository discovery and management
+
+---
+*Created: $(date)*
+*Status: Phase 3 Complete - Multi-Repo Multi-Remote Production Ready*
+*Ready for: Dev Server Deployment*

@@ -1,0 +1,48 @@
+# Git Air Configuration
+
+# Interval between file system checks (e.g., "30s", "1m", "5m")
+watch_interval: 30s
+
+# Interval between remote repository checks (e.g., "1m", "5m", "10m")
+pull_interval: 1m
+
+# Enable automatic commits
+auto_commit: true
+
+# Enable automatic pushes to ALL remotes
+auto_push: true
+
+# Enable automatic pulls from remotes
+auto_pull: true
+
+# Default commit message for auto commits
+commit_message: "auto commit"
+
+# MULTI-REPOSITORY MODE (default behavior)
+# Enable multi-repository scanning and management
+multi_repo: true
+
+# Paths to scan for Git repositories (default: current directory and all subdirs)
+scan_paths:
+  - "."
+
+# Maximum number of repositories to manage (safety limit)
+max_repos: 100
+
+# Interval for scanning for new repositories
+scan_interval: 5m
+
+# Paths to exclude from monitoring
+exclude_paths:
+  - ".git"
+  - "node_modules"
+  - "*.log"
+  - "*.tmp"
+  - ".DS_Store"
+  - "*.swp"
+  - "*.swo"
+  - ".vscode"
+  - ".idea"
+
+# Log level (debug, info, warn, error)
+log_level: "info"
